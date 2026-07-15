@@ -227,6 +227,10 @@ function getSceneInteractionType(sceneData) {
     return "paper-flip";
   }
 
+  if (sceneData?.interactionType === "document-open") {
+    return "none";
+  }
+
   if (sceneData?.interactionType && sceneData.interactionType !== "none") {
     return sceneData.interactionType;
   }
@@ -234,12 +238,32 @@ function getSceneInteractionType(sceneData) {
   return "none";
 }
 
+function getItemRef(item) {
+  return `${item?.file || ""} ${item?.src || ""}`.toLowerCase();
+}
+
+function itemHas(item, token) {
+  return getItemRef(item).includes(token);
+}
+
+function sceneHas(sceneData, token) {
+  return (sceneData?.items || []).some((item) => itemHas(item, token));
+}
+
+function getSceneId(sceneData) {
+  return String(sceneData?.id || "");
+}
+
+function getSceneItemDelay(index, base = 0.24, step = 0.22) {
+  return Number((base + index * step).toFixed(2));
+}
+
 function getDocumentItemClass(sceneData, item, index) {
   if (getSceneInteractionType(sceneData) !== "document-open") {
     return "";
   }
 
-  const ref = `${item.file || ""} ${item.src || ""}`.toLowerCase();
+  const ref = getItemRef(item);
   const sceneRef = (sceneData?.items || [])
     .map((sceneItem) => `${sceneItem.file || ""} ${sceneItem.src || ""}`)
     .join(" ")
@@ -254,14 +278,18 @@ function getDocumentItemClass(sceneData, item, index) {
     "024_p012",
   ];
   const hasKnownDocumentAssets = knownDocumentTokens.some((token) => sceneRef.includes(token));
+  const hasRedDocumentPair = sceneRef.includes("023_p012") && sceneRef.includes("024_p012");
 
   const isCover =
     ref.includes("g02_document_cover") ||
     ref.includes("组 1") ||
     ref.includes("017_p008") ||
-    ref.includes("022_p011") ||
-    ref.includes("023_p012");
+    ref.includes("022_p011");
   const isInside = ref.includes("016_p007") || ref.includes("024_p012");
+
+  if (hasRedDocumentPair && ref.includes("023_p012")) {
+    return " is-document-open-cover";
+  }
 
   if (isCover) {
     return " is-document-cover";
@@ -282,8 +310,9 @@ function getDocumentItemClass(sceneData, item, index) {
   return "";
 }
 
-function getMotionConfig(item) {
-  const ref = `${item.file || ""} ${item.src || ""}`.toLowerCase();
+function getMotionConfig(item, sceneData, index) {
+  const sceneId = getSceneId(sceneData);
+  const ref = getItemRef(item);
   const has = (token) => ref.includes(token);
 
   if (has("020_p010_img003")) {
@@ -298,12 +327,60 @@ function getMotionConfig(item) {
     return { className: " is-card-flip is-card-back", delay: 0 };
   }
 
+  if (has("062_p033_img001")) {
+    return { className: " is-depth-soft-reveal", delay: 0.55 };
+  }
+
+  if (has("038_p023_img001")) {
+    return { className: " is-gentle-shake", delay: 0.58 };
+  }
+
+  if (sceneId === "G-06" && has("027_p015_img003")) {
+    return { className: " is-place-reveal is-late-reveal", delay: 1.18 };
+  }
+
+  if (sceneId === "G-07" && has("045_p026_img003")) {
+    return { className: " is-slide-up-reveal is-slower-motion", delay: 0.5 };
+  }
+
+  if (sceneId === "G-09" && has("058_p030_img002")) {
+    return { className: " is-place-reveal", delay: 0.55 };
+  }
+
+  if (sceneId === "G-11") {
+    return { className: " is-place-reveal", delay: getSceneItemDelay(index, 0.22, 0.24) };
+  }
+
+  if (sceneId === "G-13") {
+    return { className: " is-depth-soft-reveal", delay: getSceneItemDelay(index, 0.18, 0.2) };
+  }
+
+  if (sceneId === "G-16" && has("070_p037_img001")) {
+    return { className: " is-place-reveal is-stable-reveal", delay: 0.46 };
+  }
+
+  if (sceneId === "G-21" && has("071_p038_img001")) {
+    return { className: " is-place-reveal is-stable-reveal", delay: 0.46 };
+  }
+
+  if (sceneId === "G-19" && (has("080_p042_img006") || has("082_p043_img002"))) {
+    return { className: " is-left-unfold-reveal", delay: has("080_p042_img006") ? 0.46 : 0.72 };
+  }
+
+  if (sceneId === "G-23" && has("093_p050_img004")) {
+    return { className: " is-after-text-reveal", delay: 1.42 };
+  }
+
+  if (sceneId === "G-27" && has("103_p057_img001")) {
+    return { className: " is-notice-reveal", delay: 0.64 };
+  }
+
   if (has("031_p018_img002")) {
-    return { className: " is-stagger-reveal", delay: 0.42 };
+    return { className: " is-place-reveal", delay: 0.42 };
   }
 
   if (has("032_p018_img003")) {
-    return { className: " is-stagger-reveal", delay: 0.82 };
+    return { className: " is-place-reveal", delay: 0.82 };
   }
 
   if (has("067_p035_img003")) {
@@ -334,28 +411,71 @@ function getMotionConfig(item) {
 }
 
 function getItemClasses(sceneData, item, index) {
-  return `${getDocumentItemClass(sceneData, item, index)}${getMotionConfig(item).className}`;
+  return `${getDocumentItemClass(sceneData, item, index)}${getMotionConfig(item, sceneData, index).className}`;
+}
+
+function createSequenceItemMarkup(sceneData, item, index, extraClassName = "", overrides = {}) {
+  const x = Number(overrides.x ?? item.x);
+  const y = Number(overrides.y ?? item.y);
+  const width = Number(overrides.width ?? item.width);
+  const rotate = Number(overrides.rotate ?? item.rotate);
+  const z = Number(overrides.z ?? item.z);
+  const opacity = Number(overrides.opacity ?? item.opacity);
+  const blur = Number(overrides.blur ?? item.blur);
+  const motionConfig = overrides.motionConfig || getMotionConfig(item, sceneData, index);
+
+  return `
+    <img
+      class="sequence-item${extraClassName || getItemClasses(sceneData, item, index)}"
+      src="${overrides.src || item.src}"
+      data-file="${overrides.file || item.file}"
+      alt=""
+      style="
+        --item-x: ${x}%;
+        --item-y: ${y}%;
+        --item-width: ${width}%;
+        --item-rotate: ${rotate}deg;
+        --item-z: ${z};
+        --item-opacity: ${opacity};
+        --item-blur: ${blur}px;
+        --motion-delay: ${motionConfig.delay}s;
+      "
+    >
+  `;
+}
+
+function createRedDocumentClosedCover(sceneData) {
+  if (!sceneHas(sceneData, "023_p012") || !sceneHas(sceneData, "024_p012")) {
+    return "";
+  }
+
+  const openCover = (sceneData.items || []).find((item) => itemHas(item, "023_p012"));
+  if (!openCover) {
+    return "";
+  }
+
+  const closedWidth = Number(openCover.width) * 0.54;
+  const closedX = Number(openCover.x) + Number(openCover.width) * 0.25;
+
+  return createSequenceItemMarkup(
+    sceneData,
+    openCover,
+    -1,
+    " is-document-cover is-document-closed-cover",
+    {
+      file: "red_member_cover_closed.png",
+      src: "assets/grandfather/items/red_member_cover_closed.png",
+      x: clamp(closedX, -30, 130),
+      width: closedWidth,
+      z: Number(openCover.z || 0) + 32,
+      opacity: 1,
+      motionConfig: { delay: 0 },
+    },
+  );
 }
 
 function createSceneItems(sceneData) {
-  return sceneData.items.map((item, index) => `
-    <img
-      class="sequence-item${getItemClasses(sceneData, item, index)}"
-      src="${item.src}"
-      data-file="${item.file}"
-      alt=""
-      style="
-        --item-x: ${item.x}%;
-        --item-y: ${item.y}%;
-        --item-width: ${item.width}%;
-        --item-rotate: ${item.rotate}deg;
-        --item-z: ${item.z};
-        --item-opacity: ${item.opacity};
-        --item-blur: ${item.blur}px;
-        --motion-delay: ${getMotionConfig(item).delay}s;
-      "
-    >
-  `).join("");
+  return `${sceneData.items.map((item, index) => createSequenceItemMarkup(sceneData, item, index)).join("")}${createRedDocumentClosedCover(sceneData)}`;
 }
 
 function createSceneTexts(sceneData) {

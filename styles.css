@@ -1478,6 +1478,21 @@ body.sequence-mode {
   pointer-events: none;
 }
 
+.axis-spread[data-interaction="document-open"] .is-document-open-cover {
+  z-index: calc(var(--item-z) + 12);
+  opacity: 0;
+  filter:
+    blur(calc(var(--item-blur) + 4px))
+    drop-shadow(0 18px 26px rgba(0, 0, 0, 0.3))
+    saturate(0.84)
+    brightness(0.84);
+  transform:
+    translate(-50%, -50%)
+    rotate(var(--item-rotate))
+    scale(0.982);
+  pointer-events: none;
+}
+
 .axis-spread[data-interaction="document-open"] .is-document-after-reveal {
   opacity: 0;
   filter:
@@ -1505,6 +1520,35 @@ body.sequence-mode {
     translateX(-24%)
     rotateY(-72deg)
     scaleX(0.9);
+}
+
+.axis-spread[data-interaction="document-open"].is-document-open .is-document-closed-cover {
+  opacity: 0;
+  filter:
+    blur(calc(var(--item-blur) + 2px))
+    drop-shadow(0 20px 26px rgba(0, 0, 0, 0.32))
+    saturate(0.82)
+    brightness(0.78);
+  transform:
+    translate(-50%, -50%)
+    rotate(var(--item-rotate))
+    translateX(-18%)
+    rotateY(-78deg)
+    scaleX(0.92);
+}
+
+.axis-spread[data-interaction="document-open"].is-document-open .is-document-open-cover {
+  opacity: var(--item-opacity);
+  filter:
+    blur(var(--item-blur))
+    drop-shadow(0 24px 32px rgba(0, 0, 0, 0.36))
+    saturate(0.94)
+    brightness(1.02);
+  transform:
+    translate(-50%, -50%)
+    rotate(var(--item-rotate))
+    scale(1);
+  transition-delay: 0.58s;
 }
 
 .axis-spread[data-interaction="document-open"].is-document-open .is-document-inside {
@@ -1604,19 +1648,40 @@ body.sequence-mode {
 }
 
 .axis-spread.is-axis-current .is-slow-reveal {
-  animation: memoryItemFadeIn 1.8s cubic-bezier(0.22, 1, 0.36, 1) var(--motion-delay) both;
+  animation: memoryItemFadeIn 2.05s cubic-bezier(0.22, 1, 0.36, 1) var(--motion-delay) both;
 }
 
 .axis-spread.is-axis-current .is-stagger-reveal {
   animation: memoryItemFadeIn 1.7s cubic-bezier(0.22, 1, 0.36, 1) var(--motion-delay) both;
 }
 
+.axis-spread.is-axis-current .is-place-reveal {
+  animation: memoryItemFadeIn 1.95s cubic-bezier(0.22, 1, 0.36, 1) var(--motion-delay) both;
+}
+
+.axis-spread.is-axis-current .is-place-reveal.is-late-reveal {
+  animation-duration: 2.15s;
+}
+
+.axis-spread.is-axis-current .is-place-reveal.is-stable-reveal {
+  animation-name: memoryItemStableFade;
+  animation-duration: 1.65s;
+}
+
 .axis-spread.is-axis-current .is-slide-up-reveal {
   animation: memoryItemSlideUp 1.85s cubic-bezier(0.22, 1, 0.36, 1) var(--motion-delay) both;
 }
 
+.axis-spread.is-axis-current .is-slide-up-reveal.is-slower-motion {
+  animation-duration: 2.25s;
+}
+
 .axis-spread.is-axis-current .is-depth-reveal {
   animation: memoryItemDepthReveal 1.9s cubic-bezier(0.22, 1, 0.36, 1) var(--motion-delay) both;
+}
+
+.axis-spread.is-axis-current .is-depth-soft-reveal {
+  animation: memoryItemDepthSoftReveal 2.05s cubic-bezier(0.22, 1, 0.36, 1) var(--motion-delay) both;
 }
 
 .axis-spread.is-axis-current .is-ticket-shake {
@@ -1625,7 +1690,42 @@ body.sequence-mode {
     memoryTicketShake 1.6s ease-in-out calc(var(--motion-delay) + 1s) both;
 }
 
+.axis-spread.is-axis-current .is-gentle-shake {
+  animation:
+    memoryItemFadeIn 1.35s cubic-bezier(0.22, 1, 0.36, 1) var(--motion-delay) both,
+    memoryGentleSway 5.4s ease-in-out calc(var(--motion-delay) + 1.15s) infinite;
+}
+
+.axis-spread.is-axis-current .is-left-unfold-reveal {
+  animation: memoryLeftUnfold 1.9s cubic-bezier(0.22, 1, 0.36, 1) var(--motion-delay) both;
+}
+
+.axis-spread.is-axis-current .is-after-text-reveal {
+  animation: memoryItemFadeIn 2.45s cubic-bezier(0.22, 1, 0.36, 1) var(--motion-delay) both;
+}
+
+.axis-spread.is-axis-current .is-notice-reveal {
+  animation: memoryItemFadeIn 2.55s cubic-bezier(0.22, 1, 0.36, 1) var(--motion-delay) both;
+}
+
 .grandfather-sequence[data-layout-mode="true"] .axis-spread[data-interaction="document-open"] .is-document-inside {
+  opacity: var(--item-opacity);
+  filter:
+    blur(var(--item-blur))
+    drop-shadow(0 22px 28px rgba(0, 0, 0, 0.34))
+    saturate(0.92)
+    brightness(0.98);
+  transform:
+    translate(-50%, -50%)
+    rotate(var(--item-rotate));
+  pointer-events: auto;
+}
+
+.grandfather-sequence[data-layout-mode="true"] .axis-spread[data-interaction="document-open"] .is-document-closed-cover {
+  display: none;
+}
+
+.grandfather-sequence[data-layout-mode="true"] .axis-spread[data-interaction="document-open"] .is-document-open-cover {
   opacity: var(--item-opacity);
   filter:
     blur(var(--item-blur))
@@ -1643,8 +1743,14 @@ body.sequence-mode {
 .grandfather-sequence[data-layout-mode="true"] .axis-spread[data-interaction="paper-flip"] .is-card-front,
 .grandfather-sequence[data-layout-mode="true"] .is-slow-reveal,
 .grandfather-sequence[data-layout-mode="true"] .is-stagger-reveal,
+.grandfather-sequence[data-layout-mode="true"] .is-place-reveal,
 .grandfather-sequence[data-layout-mode="true"] .is-slide-up-reveal,
 .grandfather-sequence[data-layout-mode="true"] .is-depth-reveal,
+.grandfather-sequence[data-layout-mode="true"] .is-depth-soft-reveal,
+.grandfather-sequence[data-layout-mode="true"] .is-gentle-shake,
+.grandfather-sequence[data-layout-mode="true"] .is-left-unfold-reveal,
+.grandfather-sequence[data-layout-mode="true"] .is-after-text-reveal,
+.grandfather-sequence[data-layout-mode="true"] .is-notice-reveal,
 .grandfather-sequence[data-layout-mode="true"] .is-ticket-shake {
   animation: none;
   opacity: var(--item-opacity);
@@ -1663,14 +1769,14 @@ body.sequence-mode {
   0% {
     opacity: 0;
     filter:
-      blur(calc(var(--item-blur) + 10px))
+      blur(calc(var(--item-blur) + 9px))
       drop-shadow(0 14px 22px rgba(0, 0, 0, 0.2))
       saturate(0.78)
       brightness(0.78);
     transform:
-      translate(-50%, calc(-50% + 9px))
+      translate(-50%, -50%)
       rotate(var(--item-rotate))
-      scale(0.972);
+      scale(0.985);
   }
 
   100% {
@@ -1732,14 +1838,14 @@ body.sequence-mode {
   58% {
     opacity: 0.66;
     filter:
-      blur(calc(var(--item-blur) + 4px))
+      blur(calc(var(--item-blur) + 3px))
       drop-shadow(0 18px 24px rgba(0, 0, 0, 0.26))
       saturate(0.86)
       brightness(0.9);
     transform:
       translate(-50%, -50%)
       rotate(var(--item-rotate))
-      scale(1.035);
+      scale(0.995);
   }
 
   100% {
@@ -1753,6 +1859,112 @@ body.sequence-mode {
       translate(-50%, -50%)
       rotate(var(--item-rotate))
       scale(1);
+  }
+}
+
+@keyframes memoryItemDepthSoftReveal {
+  0% {
+    opacity: 0;
+    filter:
+      blur(calc(var(--item-blur) + 12px))
+      drop-shadow(0 10px 18px rgba(0, 0, 0, 0.18))
+      saturate(0.78)
+      brightness(0.76);
+    transform:
+      translate(-50%, -50%)
+      rotate(var(--item-rotate))
+      scale(0.92);
+  }
+
+  100% {
+    opacity: var(--item-opacity);
+    filter:
+      blur(var(--item-blur))
+      drop-shadow(0 22px 28px rgba(0, 0, 0, 0.34))
+      saturate(0.92)
+      brightness(0.98);
+    transform:
+      translate(-50%, -50%)
+      rotate(var(--item-rotate))
+      scale(1);
+  }
+}
+
+@keyframes memoryItemStableFade {
+  0% {
+    opacity: 0;
+    filter:
+      blur(calc(var(--item-blur) + 3px))
+      drop-shadow(0 16px 22px rgba(0, 0, 0, 0.24))
+      saturate(0.88)
+      brightness(0.9);
+    transform:
+      translate(-50%, -50%)
+      rotate(var(--item-rotate));
+  }
+
+  100% {
+    opacity: var(--item-opacity);
+    filter:
+      blur(var(--item-blur))
+      drop-shadow(0 22px 28px rgba(0, 0, 0, 0.34))
+      saturate(0.92)
+      brightness(0.98);
+    transform:
+      translate(-50%, -50%)
+      rotate(var(--item-rotate));
+  }
+}
+
+@keyframes memoryLeftUnfold {
+  0% {
+    opacity: 0;
+    clip-path: inset(0 100% 0 0);
+    filter:
+      blur(calc(var(--item-blur) + 7px))
+      drop-shadow(0 14px 22px rgba(0, 0, 0, 0.2))
+      saturate(0.82)
+      brightness(0.82);
+    transform:
+      translate(-50%, -50%)
+      rotate(var(--item-rotate))
+      scaleX(0.94);
+    transform-origin: left center;
+  }
+
+  100% {
+    opacity: var(--item-opacity);
+    clip-path: inset(0 0 0 0);
+    filter:
+      blur(var(--item-blur))
+      drop-shadow(0 22px 28px rgba(0, 0, 0, 0.34))
+      saturate(0.92)
+      brightness(0.98);
+    transform:
+      translate(-50%, -50%)
+      rotate(var(--item-rotate))
+      scaleX(1);
+    transform-origin: left center;
+  }
+}
+
+@keyframes memoryGentleSway {
+  0%, 100% {
+    transform:
+      translate(-50%, -50%)
+      rotate(var(--item-rotate));
+  }
+
+  28% {
+    transform:
+      translate(calc(-50% - 1px), calc(-50% + 0.5px))
+      rotate(calc(var(--item-rotate) - 0.8deg));
+  }
+
+  58% {
+    transform:
+      translate(calc(-50% + 1px), calc(-50% - 0.5px))
+      rotate(calc(var(--item-rotate) + 0.7deg));
   }
 }
 
