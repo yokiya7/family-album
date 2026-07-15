@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8">
+    <base href="/">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Family Album</title>
+  <link rel="stylesheet" href="styles.css?v=hover-stable-1">
+  </head>
+  <body>
+    <main class="home-scene" id="homeScene" data-phase="initial" aria-label="Family album intro">
+      <img class="scene-bg scene-bg-wood" src="assets/home/wood-bg.png" alt="">
+      <img class="scene-bg scene-bg-memory" src="assets/home/memory-bg.png" alt="">
+
+      <div class="object-stage">
+        <div class="photo-object" id="photoObject" role="button" tabindex="0" aria-label="Drag out the photo">
+          <div class="photo-flip-container">
+            <div class="photo-flip-inner">
+              <img class="photo-face photo-back" src="assets/home/photo-back-wide.png" alt="">
+              <img class="photo-face photo-front" src="assets/home/family-front.png" alt="">
+            </div>
+            <div class="photo-flip-shadow" aria-hidden="true"></div>
+            <div class="photo-interaction-layer" aria-hidden="false">
+              <div class="dim-overlay-layer"></div>
+              <img class="active-person-reveal-layer" src="assets/home/family-front.png" alt="">
+
+              <svg class="name-guide-layer" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
+                <path class="name-guide guide-grandmother" d="M18 38 C22 37 24 39 27 43" />
+                <path class="name-guide guide-grandfather" d="M74 36 C70 37 68 40 66 43" />
+                <path class="name-guide guide-uncle-1" d="M39 18 C43 18 45 22 47 27" />
+                <path class="name-guide guide-uncle-2" d="M87 62 C84 60 82 58 79 56" />
+                <path class="name-guide guide-father" d="M56 80 C54 76 52 72 51 68" />
+                <path class="name-guide guide-aunt" d="M17 78 C22 74 25 71 29 68" />
+              </svg>
+
+              <div class="names-layer">
+                <img class="person-name name-grandmother" data-person-name="grandmother" src="assets/home/names/grandmother.png" alt="奶奶">
+                <img class="person-name name-grandfather" data-person-name="grandfather" src="assets/home/names/grandfather.png" alt="爷爷">
+                <img class="person-name name-uncle-1" data-person-name="uncle-1" src="assets/home/names/uncle-1.png" alt="大伯">
+                <img class="person-name name-uncle-2" data-person-name="uncle-2" src="assets/home/names/uncle-2.png" alt="二伯">
+                <img class="person-name name-father" data-person-name="father" src="assets/home/names/father.png" alt="爸爸">
+                <img class="person-name name-aunt" data-person-name="aunt" src="assets/home/names/aunt.png" alt="姑姑">
+              </div>
+
+              <svg class="hit-area-layer" viewBox="0 0 100 100" preserveAspectRatio="none" aria-label="选择家人">
+                <polygon class="person-hit-area" data-person="grandmother" data-href="/family/grandmother" points="24,28 34,26 42,35 43,58 36,76 24,74 17,58 18,40" />
+                <polygon class="person-hit-area" data-person="grandfather" data-href="/family/grandfather" points="56,27 66,25 72,34 73,60 67,77 56,77 50,58 51,38" />
+                <polygon class="person-hit-area" data-person="uncle-1" data-href="/family/uncle-1" points="42,10 52,9 58,18 58,43 51,54 43,48 38,29" />
+                <polygon class="person-hit-area" data-person="uncle-2" data-href="/family/uncle-2" points="73,44 84,44 93,58 92,92 75,93 68,72 68,54" />
+                <polygon class="person-hit-area" data-person="father" data-href="/family/father" points="46,56 56,56 64,69 64,93 42,93 39,70" />
+                <polygon class="person-hit-area" data-person="aunt" data-href="/family/aunt" points="22,57 34,56 42,70 40,93 20,93 15,75" />
+              </svg>
+            </div>
+          </div>
+        </div>
+
+        <img class="final-envelope-object" src="assets/home/final-envelope.png" alt="">
+        <img class="envelope-object" src="assets/home/envelope.png" alt="">
+      </div>
+    </main>
+
+    <main class="grandfather-sequence" id="grandfatherSequence" hidden aria-label="爷爷序列">
+      <div class="sequence-bg" aria-hidden="true"></div>
+      <header class="sequence-header">
+        <button class="sequence-back-link" type="button" id="sequenceBackTop">返回全家�?/button>
+        <div class="sequence-header-name">爷爷</div>
+        <div class="sequence-progress" id="sequenceProgress">01 / 27</div>
+      </header>
+
+      <section class="sequence-intro" id="sequenceIntro" aria-hidden="true">
+        <div class="sequence-person-name">爷爷</div>
+        <div class="sequence-person-years">1937-2004</div>
+        <p class="sequence-person-description">他的旧物还在，时间也还在�?/p>
+      </section>
+
+      <section class="horizontal-memory-stage" id="horizontalMemoryStage" aria-live="polite"></section>
+
+      <footer class="sequence-footer">
+        <button class="sequence-nav-link" type="button" id="sequencePrev">上一�?/button>
+        <div class="sequence-scene-info" id="sequenceSceneInfo"></div>
+        <button class="sequence-nav-link" type="button" id="sequenceNext">下一�?/button>
+      </footer>
+    </main>
+
+  <script src="grandfather-scenes.js?v=hover-stable-1"></script>
+  <script src="app.js?v=hover-stable-1"></script>
+  </body>
+</html>

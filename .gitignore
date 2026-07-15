@@ -1,0 +1,12 @@
+node_modules/
+dist/
+public/
+.next/
+.wrangler/
+.open-next/
+extracted/
+organized-photo-sequences/
+tmp/
+__pycache__/
+*.log
+emergency-save-layout-snippet.txt
