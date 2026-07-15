@@ -5,15 +5,15 @@
     <base href="/">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Family Album</title>
-  <link rel="stylesheet" href="styles.css?v=hover-stable-1">
+    <link rel="stylesheet" href="styles.css?v=hover-stable-1">
   </head>
   <body>
-    <main class="home-scene" id="homeScene" data-phase="initial" aria-label="Family album intro">
+    <main class="home-scene" id="homeScene" data-phase="initial" aria-label="家庭相册首页">
       <img class="scene-bg scene-bg-wood" src="assets/home/wood-bg.png" alt="">
       <img class="scene-bg scene-bg-memory" src="assets/home/memory-bg.png" alt="">
 
       <div class="object-stage">
-        <div class="photo-object" id="photoObject" role="button" tabindex="0" aria-label="Drag out the photo">
+        <div class="photo-object" id="photoObject" role="button" tabindex="0" aria-label="拖出照片">
           <div class="photo-flip-container">
             <div class="photo-flip-inner">
               <img class="photo-face photo-back" src="assets/home/photo-back-wide.png" alt="">
@@ -62,7 +62,7 @@
     <main class="grandfather-sequence" id="grandfatherSequence" hidden aria-label="爷爷序列">
       <div class="sequence-bg" aria-hidden="true"></div>
       <header class="sequence-header">
-        <button class="sequence-back-link" type="button" id="sequenceBackTop">返回全家�?/button>
+        <button class="sequence-back-link" type="button" id="sequenceBackTop">返回全家福</button>
         <div class="sequence-header-name">爷爷</div>
         <div class="sequence-progress" id="sequenceProgress">01 / 27</div>
       </header>
@@ -70,19 +70,19 @@
       <section class="sequence-intro" id="sequenceIntro" aria-hidden="true">
         <div class="sequence-person-name">爷爷</div>
         <div class="sequence-person-years">1937-2004</div>
-        <p class="sequence-person-description">他的旧物还在，时间也还在�?/p>
+        <p class="sequence-person-description">他的旧物还在，时间也还在。</p>
       </section>
 
       <section class="horizontal-memory-stage" id="horizontalMemoryStage" aria-live="polite"></section>
 
       <footer class="sequence-footer">
-        <button class="sequence-nav-link" type="button" id="sequencePrev">上一�?/button>
+        <button class="sequence-nav-link" type="button" id="sequencePrev">上一页</button>
         <div class="sequence-scene-info" id="sequenceSceneInfo"></div>
-        <button class="sequence-nav-link" type="button" id="sequenceNext">下一�?/button>
+        <button class="sequence-nav-link" type="button" id="sequenceNext">下一页</button>
       </footer>
     </main>
 
-  <script src="grandfather-scenes.js?v=hover-stable-1"></script>
-  <script src="app.js?v=hover-stable-1"></script>
+    <script src="grandfather-scenes.js?v=hover-stable-1"></script>
+    <script src="app.js?v=hover-stable-1"></script>
   </body>
 </html>

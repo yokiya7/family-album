@@ -4,6 +4,7 @@ public/
 .next/
 .wrangler/
 .open-next/
+.vercel/
 extracted/
 organized-photo-sequences/
 tmp/
