@@ -5,6 +5,7 @@ public/
 .wrangler/
 .open-next/
 .vercel/
+.env*
 extracted/
 organized-photo-sequences/
 tmp/
