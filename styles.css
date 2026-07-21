@@ -1493,6 +1493,10 @@ body.sequence-mode {
   pointer-events: none;
 }
 
+.axis-spread[data-interaction="document-open"] .is-document-hidden-cover {
+  display: none;
+}
+
 .axis-spread[data-interaction="document-open"] .is-document-after-reveal {
   opacity: 0;
   filter:
@@ -1676,6 +1680,10 @@ body.sequence-mode {
   animation-duration: 2.25s;
 }
 
+.axis-spread.is-axis-current .is-down-reveal {
+  animation: memoryItemDownReveal 1.9s cubic-bezier(0.22, 1, 0.36, 1) var(--motion-delay) both;
+}
+
 .axis-spread.is-axis-current .is-depth-reveal {
   animation: memoryItemDepthReveal 1.9s cubic-bezier(0.22, 1, 0.36, 1) var(--motion-delay) both;
 }
@@ -1725,6 +1733,20 @@ body.sequence-mode {
   display: none;
 }
 
+.grandfather-sequence[data-layout-mode="true"] .axis-spread[data-interaction="document-open"] .is-document-hidden-cover {
+  display: block;
+  opacity: var(--item-opacity);
+  filter:
+    blur(var(--item-blur))
+    drop-shadow(0 22px 28px rgba(0, 0, 0, 0.34))
+    saturate(0.92)
+    brightness(0.98);
+  transform:
+    translate(-50%, -50%)
+    rotate(var(--item-rotate));
+  pointer-events: auto;
+}
+
 .grandfather-sequence[data-layout-mode="true"] .axis-spread[data-interaction="document-open"] .is-document-open-cover {
   opacity: var(--item-opacity);
   filter:
@@ -1745,6 +1767,7 @@ body.sequence-mode {
 .grandfather-sequence[data-layout-mode="true"] .is-stagger-reveal,
 .grandfather-sequence[data-layout-mode="true"] .is-place-reveal,
 .grandfather-sequence[data-layout-mode="true"] .is-slide-up-reveal,
+.grandfather-sequence[data-layout-mode="true"] .is-down-reveal,
 .grandfather-sequence[data-layout-mode="true"] .is-depth-reveal,
 .grandfather-sequence[data-layout-mode="true"] .is-depth-soft-reveal,
 .grandfather-sequence[data-layout-mode="true"] .is-gentle-shake,
@@ -1765,6 +1788,10 @@ body.sequence-mode {
   pointer-events: auto;
 }
 
+.sequence-text.is-delayed-text {
+  transition-delay: var(--text-motion-delay);
+}
+
 @keyframes memoryItemFadeIn {
   0% {
     opacity: 0;
@@ -1775,6 +1802,34 @@ body.sequence-mode {
       brightness(0.78);
     transform:
       translate(-50%, -50%)
+      rotate(var(--item-rotate))
+      scale(0.985);
+  }
+
+  100% {
+    opacity: var(--item-opacity);
+    filter:
+      blur(var(--item-blur))
+      drop-shadow(0 22px 28px rgba(0, 0, 0, 0.34))
+      saturate(0.92)
+      brightness(0.98);
+    transform:
+      translate(-50%, -50%)
+      rotate(var(--item-rotate))
+      scale(1);
+  }
+}
+
+@keyframes memoryItemDownReveal {
+  0% {
+    opacity: 0;
+    filter:
+      blur(calc(var(--item-blur) + 9px))
+      drop-shadow(0 14px 22px rgba(0, 0, 0, 0.2))
+      saturate(0.8)
+      brightness(0.8);
+    transform:
+      translate(-50%, calc(-50% - 22px))
       rotate(var(--item-rotate))
       scale(0.985);
   }

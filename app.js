@@ -288,7 +288,7 @@ function getDocumentItemClass(sceneData, item, index) {
   const isInside = ref.includes("016_p007") || ref.includes("024_p012");
 
   if (hasRedDocumentPair && ref.includes("023_p012")) {
-    return " is-document-open-cover";
+    return " is-document-hidden-cover";
   }
 
   if (isCover) {
@@ -349,6 +349,22 @@ function getMotionConfig(item, sceneData, index) {
 
   if (sceneId === "G-11") {
     return { className: " is-place-reveal", delay: getSceneItemDelay(index, 0.22, 0.24) };
+  }
+
+  if (sceneId === "G-12" && has("048_p027_img002")) {
+    return { className: " is-place-reveal", delay: 0.24 };
+  }
+
+  if (sceneId === "G-12" && has("049_p028_img001")) {
+    return { className: " is-down-reveal", delay: 1.36 };
+  }
+
+  if (sceneId === "G-14" && has("069_p036_img002")) {
+    return { className: " is-place-reveal", delay: 0.24 };
+  }
+
+  if (sceneId === "G-14" && has("067_p035_img003")) {
+    return { className: " is-ticket-shake", delay: 1.28 };
   }
 
   if (sceneId === "G-13") {
@@ -412,6 +428,14 @@ function getMotionConfig(item, sceneData, index) {
 
 function getItemClasses(sceneData, item, index) {
   return `${getDocumentItemClass(sceneData, item, index)}${getMotionConfig(item, sceneData, index).className}`;
+}
+
+function getTextMotionConfig(textItem, sceneData, index) {
+  if (getSceneId(sceneData) === "G-11") {
+    return { className: " is-delayed-text", delay: 3.35 };
+  }
+
+  return { className: "", delay: 0.22 };
 }
 
 function createSequenceItemMarkup(sceneData, item, index, extraClassName = "", overrides = {}) {
@@ -479,9 +503,11 @@ function createSceneItems(sceneData) {
 }
 
 function createSceneTexts(sceneData) {
-  return (sceneData.texts || []).map((item) => `
+  return (sceneData.texts || []).map((item, index) => {
+    const textMotionConfig = getTextMotionConfig(item, sceneData, index);
+    return `
     <div
-      class="sequence-text"
+      class="sequence-text${textMotionConfig.className}"
       data-text-id="${item.id}"
       style="
         --text-x: ${item.x}%;
@@ -493,9 +519,11 @@ function createSceneTexts(sceneData) {
         --text-z: ${item.z};
         --text-opacity: ${item.opacity};
         --text-blur: ${item.blur}px;
+        --text-motion-delay: ${textMotionConfig.delay}s;
       "
     >${escapeHtml(item.text || "")}</div>
-  `).join("");
+  `;
+  }).join("");
 }
 
 function renderGrandfatherSequence() {
